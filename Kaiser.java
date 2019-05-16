@@ -1,3 +1,4 @@
+//copyright by Matthias Kleiber
 import java.util.Scanner;
 
 public class Main {
