@@ -1,14 +1,15 @@
 import java.util.Scanner;
 
 public class Main {
-	public static int BAUM = 1;
-	public static int STAMM = 2;
-	public static int WIESE = 3; 
-	public static int SETZLING = 4;
-	public static int BRETTER = 5;
-	public static int FOERSTER = 6;
-	public static int HOLZFAELLER = 7;
-	public static int SAEGEWERK = 8;
+	public static int BAUM = 0;
+	public static int STAMM = 1;
+	public static int WIESE = 2; 
+	public static int SETZLING = 3;
+	public static int BRETTER = 4;
+	public static int FOERSTER = 5;
+	public static int HOLZFAELLER = 6;
+	public static int SAEGEWERK = 7;
+	public static int ANZAHL_FELDINHALT_TYPEN = 8;
 	public static int ANZAHL_GEBAEUDE_TYPEN = 3;
 	public static int[] gebaeudeTypen = new int[ANZAHL_GEBAEUDE_TYPEN];
 	public static int SIZE_X = 15;
@@ -19,6 +20,7 @@ public class Main {
 	public static boolean[][] berechnet = new boolean[SIZE_Y][SIZE_X];
 	public static Spieler spieler = new Spieler();
 	public static Scanner scanner = new Scanner(System.in);
+	public static Siedler2D siedler2DFrame;
 
 	public static void main(String[] args) {
 		initialisiereSpiel();
@@ -170,6 +172,8 @@ public class Main {
 		land[2][7] = FOERSTER;
 		land[3][6] = HOLZFAELLER;
 		land[2][4] = SAEGEWERK;
+		
+		siedler2DFrame = new Siedler2D();
 	}
 
 	private static void resetSperren() {
@@ -183,9 +187,7 @@ public class Main {
 	private static void rechne() {
 		for (int y = 0; y < SIZE_Y; y++) {
 			for (int x = 0; x < SIZE_X; x++) {
-				Position position = new Position();
-				position.x = x;
-				position.y = y;
+				Position position = createPosition(y, x);
 				int feldInhalt = getFeldInhalt(position);
 				// ein Arbeiter darf nur arbeiten, wenn sein Haus nicht gerade frisch gebaut wurde (Feld gesperrt für diese Runde)
 				boolean feldGesperrt = berechnet[position.y][position.x];
@@ -221,6 +223,8 @@ public class Main {
 			print("");
 		}
 		print("");
+	
+		siedler2DFrame.zeichne();
 	}
 
 	private static void printSpielstatus() {
@@ -228,7 +232,7 @@ public class Main {
 		print("Du hast " + spieler.gold + " Gold.");
 	}
 	
-	private static int getFeldInhalt(Position position) {
+	public static int getFeldInhalt(Position position) {
 		return land[position.y][position.x];
 	}
 
@@ -350,7 +354,7 @@ public class Main {
 		berechnet[position.y][position.x] = true;
 	}
 
-	private static Position createPosition(int y, int x) {
+	public static Position createPosition(int y, int x) {
 		Position position = new Position();
 		position.x = x;
 		position.y = y;
