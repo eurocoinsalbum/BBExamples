@@ -43,7 +43,7 @@ public class Main {
 			}
 			System.out.println("");
 		}
-		System.out.println("");
+		System.out.println("####################");
 	}
 
 	private static void moveRobot(Robot robot, Command command) {
