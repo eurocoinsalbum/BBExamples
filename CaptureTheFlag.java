@@ -8,25 +8,47 @@ public class Main {
 
 	public static void main(String[] args) {
 		initGame();
+		int moves = 0;
+		int manhatten = getManhatten(flagPosition, robot.position);
 		
-		for (int i = 0; i < 50; i++) {
+		System.out.println("Startposition");
+		printField();
+		while(true) {
 			Command command = robot.getCommand(flagPosition);
 			if (command == Command.TAKE) {
 				if (robot.position.matches(flagPosition)) {
 					System.out.println("Captured the flag!");
 					break;
+				} else {
+					System.out.println("Fehlgriff!");
 				}
 			} else {
 				moveRobot(robot, command);
 			}
+			moves++;
+			System.out.println("Nach Schritt Nr. " + moves);
 			printField();
 		}
+		System.out.println("Erwartete Schritte: " + manhatten);
+		System.out.println("Benötigte Schritte: " + moves);
+	}
+
+	private static int getManhatten(Position pos1, Position pos2) {
+		return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
 	}
 
 	private static void initGame() {
 		robot = new Robot();
-		flagPosition = createPosition(4, 8);
-		robot.position = createPosition(SIZE_Y / 2, SIZE_X / 2);
+		flagPosition = getZufallPosition();
+		robot.position = getZufallPosition();
+	}
+	
+	private static Position getZufallPosition() {
+		return createPosition(getZufall(1, SIZE_Y - 1), getZufall(1, SIZE_X - 1));
+	}
+	
+	private static int getZufall(int min, int max) {
+		return (int)(Math.random() * (max - min)) + min;
 	}
 
 	private static void printField() {
@@ -43,7 +65,7 @@ public class Main {
 			}
 			System.out.println("");
 		}
-		System.out.println("####################");
+		System.out.println("##############");
 	}
 
 	private static void moveRobot(Robot robot, Command command) {
